@@ -41,7 +41,7 @@ from pytorch_pretrained_bert.modeling import BertForSequenceClassification, Bert
 from pytorch_pretrained_bert.tokenization import BertTokenizer
 from pytorch_pretrained_bert.optimization import BertAdam, WarmupLinearSchedule
 
-os.environ['CUDA_VISIBLE_DEVICES']= '6'
+os.environ['CUDA_VISIBLE_DEVICES']= '0,1'
 #torch.backends.cudnn.deterministic = True
 
 logger = logging.getLogger(__name__)
@@ -548,8 +548,8 @@ def main():
     entity_list = processor.get_entities(args.data_dir)
     #print(entity_list)
 
-    tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=args.do_lower_case)
-
+    # tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=args.do_lower_case)
+    tokenizer = BertTokenizer.from_pretrained("D:\\Documents\\code\\pretrained\\bert\\bert-base-uncased-vocab.txt", do_lower_case=args.do_lower_case)
     train_examples = None
     num_train_optimization_steps = 0
     if args.do_train:
@@ -561,7 +561,10 @@ def main():
 
     # Prepare model
     cache_dir = args.cache_dir if args.cache_dir else os.path.join(str(PYTORCH_PRETRAINED_BERT_CACHE), 'distributed_{}'.format(args.local_rank))
-    model = BertForSequenceClassification.from_pretrained(args.bert_model,
+    # model = BertForSequenceClassification.from_pretrained(args.bert_model,
+    #           cache_dir=cache_dir,
+    #           num_labels=num_labels)
+    model = BertForSequenceClassification.from_pretrained("D:\\Documents\\code\\pretrained\\bert\\bert-base-uncased.tar.gz",
               cache_dir=cache_dir,
               num_labels=num_labels)
     if args.fp16:
